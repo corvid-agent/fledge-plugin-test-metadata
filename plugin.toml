@@ -1,0 +1,22 @@
+[plugin]
+name = "test-metadata"
+version = "0.1.0"
+description = "Tests the metadata capability — verifies WASM plugins can query project metadata"
+author = "CorvidLabs"
+protocol = "fledge-v1"
+runtime = "wasm"
+
+[[commands]]
+name = "test-metadata"
+description = "Run metadata capability tests"
+binary = "target/wasm32-wasip1/release/test-metadata.wasm"
+
+[hooks]
+build = "cargo build --target wasm32-wasip1 --release"
+
+[capabilities]
+exec = false
+store = false
+metadata = true
+filesystem = "none"
+network = false
