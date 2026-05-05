@@ -35,7 +35,10 @@ fn json_escape(s: &str) -> String {
 }
 
 fn output(text: &str) {
-    fledge_send(&format!(r#"{{"type":"output","text":"{}"}}"#, json_escape(text)));
+    fledge_send(&format!(
+        r#"{{"type":"output","text":"{}"}}"#,
+        json_escape(text)
+    ));
 }
 
 fn pass(msg: &str) {
@@ -53,7 +56,7 @@ fn header(title: &str) {
 }
 
 fn fledge_metadata(keys_json: &str) -> String {
-    let _resp_len = unsafe { metadata(keys_json.as_ptr() as *const u8, keys_json.len() as i32) };
+    let _resp_len = unsafe { metadata(keys_json.as_ptr(), keys_json.len() as i32) };
     let resp = fledge_recv();
     String::from_utf8_lossy(&resp).to_string()
 }
@@ -109,7 +112,10 @@ fn test_env() {
     if resp.contains("env") {
         pass("env key present");
         // Should NOT contain sensitive vars (they're filtered)
-        if resp.contains("GITHUB_TOKEN") || resp.contains("GH_TOKEN") || resp.contains("ANTHROPIC_API_KEY") {
+        if resp.contains("GITHUB_TOKEN")
+            || resp.contains("GH_TOKEN")
+            || resp.contains("ANTHROPIC_API_KEY")
+        {
             fail("env contains sensitive tokens (should be filtered)");
         } else {
             pass("no sensitive tokens in env response");
